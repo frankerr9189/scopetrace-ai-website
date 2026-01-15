@@ -76,23 +76,23 @@ export function WalkthroughSection() {
     <section className="py-24 px-6 bg-gradient-to-b from-background to-card/30">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left: Video placeholder */}
+          {/* Left: Video */}
           <div className="relative">
-            <div className="relative aspect-video bg-card border border-border/50 rounded-lg overflow-hidden group cursor-pointer">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5" />
-              
-              {/* Play button */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-primary/90 flex items-center justify-center group-hover:bg-primary transition-all duration-300 shadow-lg shadow-primary/30">
+            <div className="relative aspect-video bg-card border border-border/50 rounded-lg overflow-hidden group">
+              <video
+                className="w-full h-full object-cover"
+                controls
+                preload="metadata"
+                poster="/scopetrace-horizontal.png"
+              >
+                <source src="/ScopeTraceAI.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              {/* Play button overlay - shows on hover when video is paused */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="w-20 h-20 rounded-full bg-primary/90 flex items-center justify-center shadow-lg shadow-primary/30">
                   <Play className="w-8 h-8 text-primary-foreground ml-1" fill="currentColor" />
                 </div>
-              </div>
-
-              {/* Decorative elements */}
-              <div className="absolute top-4 left-4 right-4 flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <div className="w-3 h-3 rounded-full bg-green-500/80" />
               </div>
             </div>
             
