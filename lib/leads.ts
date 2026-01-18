@@ -51,18 +51,19 @@ export function getUtmParams(): {
  * Get the API base URL based on environment
  */
 function getApiBase(): string {
-  // If explicitly set, use that
+  // Always use NEXT_PUBLIC_API_BASE if set (highest priority)
   if (process.env.NEXT_PUBLIC_API_BASE) {
     return process.env.NEXT_PUBLIC_API_BASE;
   }
   
-  // In development, default to local backend
+  // In development, default to local backend if not set
   if (process.env.NODE_ENV === 'development') {
     return 'http://localhost:5050';
   }
   
-  // Production default
-  return 'https://api.scopetraceai.com';
+  // Production fallback (should be set via NEXT_PUBLIC_API_BASE in production)
+  console.warn('NEXT_PUBLIC_API_BASE not set, using fallback. Please set this environment variable in production.');
+  return 'https://scopetraceai-platform.onrender.com';
 }
 
 export async function submitLeadToBackend(payload: LeadPayload): Promise<LeadResponse> {

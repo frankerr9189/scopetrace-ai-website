@@ -36,10 +36,11 @@ export async function POST(request: NextRequest) {
 
     // Persist to backend database (Flask API)
     // This is additive - Slack notifications remain unchanged
+    // Use NEXT_PUBLIC_API_BASE if set, otherwise fallback based on environment
     const apiBase = process.env.NEXT_PUBLIC_API_BASE || 
       (process.env.NODE_ENV === 'development' 
         ? 'http://localhost:5050' 
-        : 'https://api.scopetraceai.com');
+        : 'https://scopetraceai-platform.onrender.com');
     const backendUrl = `${apiBase}/api/v1/leads`;
     
     try {
