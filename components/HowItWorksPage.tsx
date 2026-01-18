@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Upload, FileText, Lock, TestTube, Shield, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import MoreInfoModal from "@/components/MoreInfoModal";
 
 export default function HowItWorksPage() {
@@ -328,6 +329,7 @@ export default function HowItWorksPage() {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
       <MoreInfoModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>

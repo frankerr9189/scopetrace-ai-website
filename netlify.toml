@@ -1,0 +1,21 @@
+[build]
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# HTTPS redirects
+[[redirects]]
+  from = "http://scopetraceai.com/*"
+  to = "https://scopetraceai.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.scopetraceai.com/*"
+  to = "https://scopetraceai.com/:splat"
+  status = 301
+  force = true
