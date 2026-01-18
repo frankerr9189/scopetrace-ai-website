@@ -8,13 +8,13 @@ interface NavigationProps {
 }
 
 export function Navigation({ onMoreInfoClick }: NavigationProps) {
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#05070A] border-b border-border/50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link
           href="/"
           className="hover:opacity-80 transition-opacity"
+          prefetch={true}
         >
           <img
             src="/scopetrace-horizontal.png"
@@ -46,7 +46,7 @@ export function Navigation({ onMoreInfoClick }: NavigationProps) {
             href="/pricing"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            Price Plan
+            Pricing
           </Link>
           <Link
             href="https://app.scopetraceai.com/login"

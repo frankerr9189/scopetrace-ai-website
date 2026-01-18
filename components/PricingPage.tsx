@@ -4,9 +4,89 @@ import { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import MoreInfoModal from "@/components/MoreInfoModal";
+import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
 
 export default function PricingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const plans = [
+    {
+      name: "Free Tier",
+      price: "$0",
+      subtitle: "Perfect for evaluating ScopeTraceAI",
+      bullets: [
+        "1 user",
+        "All agents included",
+        "3 runs per agent",
+        "Jira integration setup",
+        "Basic run history"
+      ],
+      buttonText: "Get Started Free",
+      buttonAction: "https://app.scopetraceai.com/register"
+    },
+    {
+      name: "User Tier",
+      price: "$59/mo",
+      subtitle: "For individuals and small teams",
+      bullets: [
+        "Up to 5 users",
+        "All agents included",
+        "Jira integrations",
+        "Full run history",
+        "Email support"
+      ],
+      buttonText: "Start User Tier",
+      buttonAction: "https://app.scopetraceai.com/register"
+    },
+    {
+      name: "Team Tier",
+      price: "$249/mo",
+      subtitle: "For growing teams shipping faster",
+      bullets: [
+        "Up to 15 users",
+        "All agents included",
+        "Higher usage limits",
+        "Priority processing",
+        "Extended audit history"
+      ],
+      buttonText: "Start Team Tier",
+      buttonAction: "https://app.scopetraceai.com/register"
+    },
+    {
+      name: "Enterprise",
+      price: "Contact",
+      subtitle: "For larger organizations and custom needs",
+      bullets: [
+        "Unlimited users",
+        "Custom limits",
+        "SSO / advanced governance",
+        "Dedicated support",
+        "Custom retention"
+      ],
+      buttonText: "Contact Us",
+      buttonAction: "mailto:hello@scopetraceai.com?subject=ScopeTraceAI%20Enterprise%20Inquiry"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "Do I need a credit card for Free Tier?",
+      answer: "No."
+    },
+    {
+      question: "Do all plans include all agents?",
+      answer: "Yes."
+    },
+    {
+      question: "Can I upgrade later?",
+      answer: "Yes, upgrades are seamless."
+    },
+    {
+      question: "How do you protect customer data?",
+      answer: "We do not sell or share your data; see Privacy Policy."
+    }
+  ];
 
   return (
     <>
@@ -32,27 +112,99 @@ export default function PricingPage() {
           />
 
           {/* Main Content */}
-          <section className="pt-32 pb-20 px-6 min-h-[80vh] flex items-center justify-center">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-5xl md:text-6xl font-medium tracking-tight text-foreground mb-8">
-                Pricing Information
+          <div className="max-w-7xl mx-auto px-6 py-24 mt-16">
+            {/* Header */}
+            <header className="mb-16 text-center">
+              <h1 className="text-5xl md:text-6xl font-medium tracking-tight mb-6">
+                Pricing
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed mb-12">
-                Contact us to discuss pricing options tailored to your organization's needs.
+              <p className="text-xl text-muted-foreground mb-4 max-w-3xl mx-auto">
+                Choose the plan that fits your team's needs.
               </p>
-              <div className="border border-border/50 bg-card/50 rounded-lg p-12 inline-block">
-                <p className="text-lg text-muted-foreground mb-4">
-                  For pricing inquiries, please contact:
-                </p>
-                <a
-                  href="mailto:Hello@scopetraceai.com"
-                  className="text-2xl text-primary hover:text-primary/80 transition-colors"
+            </header>
+
+            {/* Pricing Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
+              {plans.map((plan, index) => (
+                <div
+                  key={index}
+                  className="bg-card border border-border/50 rounded-lg p-8 flex flex-col hover:border-primary/30 transition-all duration-300"
                 >
-                  Hello@scopetraceai.com
-                </a>
-              </div>
+                  <h3 className="text-2xl font-medium text-foreground mb-2">
+                    {plan.name}
+                  </h3>
+                  <div className="mb-4">
+                    {plan.price === "Contact" ? (
+                      <div className="text-3xl font-medium text-foreground mb-2">
+                        {plan.price}
+                      </div>
+                    ) : (
+                      <div className="text-3xl font-medium text-foreground mb-2">
+                        {plan.price}
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    {plan.subtitle}
+                  </p>
+                  <ul className="space-y-3 mb-8 flex-1">
+                    {plan.bullets.map((bullet, bulletIndex) => (
+                      <li key={bulletIndex} className="flex items-start gap-3">
+                        <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span className="text-foreground/90 text-sm">{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {plan.buttonAction.startsWith("mailto:") ? (
+                    <a
+                      href={plan.buttonAction}
+                      className="w-full"
+                    >
+                      <Button
+                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                        size="lg"
+                      >
+                        {plan.buttonText}
+                      </Button>
+                    </a>
+                  ) : (
+                    <a
+                      href={plan.buttonAction}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full"
+                    >
+                      <Button
+                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                        size="lg"
+                      >
+                        {plan.buttonText}
+                      </Button>
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
-          </section>
+
+            {/* FAQ Section */}
+            <section className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-medium text-center mb-12">
+                Frequently Asked Questions
+              </h2>
+              <div className="space-y-8">
+                {faqs.map((faq, index) => (
+                  <div key={index} className="border-b border-border/50 pb-8 last:border-b-0">
+                    <h3 className="text-xl font-medium text-foreground mb-3">
+                      {faq.question}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {faq.answer}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
 
           {/* Footer */}
           <Footer />
