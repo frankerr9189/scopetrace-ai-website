@@ -38,8 +38,27 @@ export function Hero() {
           <Button
             size="lg"
             className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base shadow-lg shadow-primary/20"
+            asChild
           >
-            Register New Account
+            <a
+              href={
+                (() => {
+                  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+                  // If appUrl is set and doesn't contain localhost, use it (for QA/prod environments)
+                  if (appUrl && !appUrl.includes('localhost')) {
+                    return `${appUrl}/register`;
+                  }
+                  // If appUrl contains localhost, only use it in development
+                  if (appUrl && appUrl.includes('localhost') && process.env.NODE_ENV === 'development') {
+                    return `${appUrl}/register`;
+                  }
+                  // Production fallback - never use localhost
+                  return 'https://app.scopetraceai.com/register';
+                })()
+              }
+            >
+              Register New Account
+            </a>
           </Button>
         </div>
 
