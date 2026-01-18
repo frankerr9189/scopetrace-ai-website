@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { submitLeadToBackend, getUtmParams } from "@/lib/leads";
 import { Play } from "lucide-react";
 
 export function WalkthroughSection() {
@@ -31,44 +32,66 @@ export function WalkthroughSection() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/lead", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          workEmail: formData.email,
-          role: formData.role,
-          company: formData.company || undefined,
-          useCase: formData.useCase || undefined,
-          phoneNumber: formData.phone || undefined,
-        }),
+      // Submit to Flask backend for DB persistence
+      const name = `${formData.firstName} ${formData.lastName}`.trim();
+      const message = formData.phone 
+        ? `Phone: ${formData.phone}${formData.useCase ? ` | Use Case: ${formData.useCase}` : ''}`
+        : (formData.useCase ? `Use Case: ${formData.useCase}` : undefined);
+
+      const utmParams = getUtmParams();
+      
+      await submitLeadToBackend({
+        name,
+        email: formData.email,
+        company: formData.company || undefined,
+        role: formData.role || undefined,
+        message: message || undefined,
+        source: 'marketing_more_info',
+        source_page: typeof window !== 'undefined' ? window.location.pathname : '/',
+        ...utmParams,
       });
 
-      if (response.ok) {
-        setSubmitted(true);
-        setTimeout(() => {
-          setSubmitted(false);
-          setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            role: "",
-            company: "",
-            useCase: "",
-            phone: "",
-            usesJira: ""
-          });
-          setIsLoading(false);
-        }, 3000);
-      } else {
-        setIsLoading(false);
+      // Also call Next.js route for Slack notifications (existing behavior preserved)
+      try {
+        await fetch("/api/lead", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            workEmail: formData.email,
+            role: formData.role,
+            company: formData.company || undefined,
+            useCase: formData.useCase || undefined,
+            phoneNumber: formData.phone || undefined,
+          }),
+        });
+      } catch (slackError) {
+        // Slack notification failure is non-blocking
+        console.warn("Slack notification failed:", slackError);
       }
-    } catch (error) {
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          role: "",
+          company: "",
+          useCase: "",
+          phone: "",
+          usesJira: ""
+        });
+        setIsLoading(false);
+      }, 3000);
+    } catch (error: any) {
       console.error("Error submitting form:", error);
       setIsLoading(false);
+      // Could show error message to user here if needed
     }
   };
 
@@ -110,9 +133,13 @@ export function WalkthroughSection() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-medium text-foreground mb-2">Thank you!</h3>
+                <h3 className="text-2xl font-medium text-foreground mb-2">Thank you for reaching out!</h3>
                 <p className="text-muted-foreground">
-                  We'll send you information about ScopeTraceAI shortly.
+                  We've received your request. Please contact{" "}
+                  <a href="mailto:hello@scopetraceai.com" className="text-primary hover:underline">
+                    hello@scopetraceai.com
+                  </a>
+                  {" "}if you need anything.
                 </p>
               </div>
             ) : (

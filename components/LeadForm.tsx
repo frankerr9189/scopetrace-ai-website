@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { submitLeadToBackend, getUtmParams } from "@/lib/leads";
 
 interface LeadFormProps {
   onSuccess: () => void;
@@ -65,24 +66,46 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/lead", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      // Submit to Flask backend for DB persistence
+      const name = `${formData.firstName} ${formData.lastName}`.trim();
+      const message = formData.phoneNumber 
+        ? `Phone: ${formData.phoneNumber}${formData.useCase ? ` | Use Case: ${formData.useCase}` : ''}`
+        : (formData.useCase ? `Use Case: ${formData.useCase}` : undefined);
+
+      const utmParams = getUtmParams();
+      
+      await submitLeadToBackend({
+        name,
+        email: formData.workEmail,
+        company: formData.company || undefined,
+        role: formData.role || undefined,
+        message: message || undefined,
+        source: 'marketing_more_info',
+        source_page: typeof window !== 'undefined' ? window.location.pathname : '/',
+        ...utmParams,
       });
 
-      if (response.ok) {
-        setIsSuccess(true);
-        setTimeout(() => {
-          onSuccess();
-        }, 2000);
-      } else {
-        setErrors({ submit: "Something went wrong. Please try again." });
+      // Also call Next.js route for Slack notifications (existing behavior preserved)
+      try {
+        await fetch("/api/lead", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      } catch (slackError) {
+        // Slack notification failure is non-blocking
+        console.warn("Slack notification failed:", slackError);
       }
-    } catch (error) {
-      setErrors({ submit: "Something went wrong. Please try again." });
+
+      setIsSuccess(true);
+      setTimeout(() => {
+        onSuccess();
+      }, 2000);
+    } catch (error: any) {
+      console.error("Lead submission error:", error);
+      setErrors({ submit: error.message || "Something went wrong. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
@@ -96,9 +119,13 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="text-2xl font-medium text-foreground mb-2">Thank you!</h3>
+        <h3 className="text-2xl font-medium text-foreground mb-2">Thank you for reaching out!</h3>
         <p className="text-muted-foreground">
-          We'll send you information about ScopeTraceAI shortly.
+          We've received your request. Please contact{" "}
+          <a href="mailto:hello@scopetraceai.com" className="text-primary hover:underline">
+            hello@scopetraceai.com
+          </a>
+          {" "}if you need anything.
         </p>
       </div>
     );
