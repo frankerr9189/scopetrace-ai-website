@@ -10,6 +10,11 @@ import { Check } from "lucide-react";
 export default function PricingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Use environment variable for override, or auto-detect local dev, default to production
+  const registerUrl = 
+    process.env.NEXT_PUBLIC_APP_REGISTER_URL || 
+    (process.env.NODE_ENV === 'development' ? "http://localhost:5137/login" : "https://app.scopetraceai.com/register");
+
   const plans = [
     {
       name: "Free Tier",
@@ -23,7 +28,7 @@ export default function PricingPage() {
         "Basic run history"
       ],
       buttonText: "Get Started Free",
-      buttonAction: "https://app.scopetraceai.com/register"
+      buttonAction: registerUrl
     },
     {
       name: "User Tier",
@@ -37,7 +42,7 @@ export default function PricingPage() {
         "Email support"
       ],
       buttonText: "Start User Tier",
-      buttonAction: "https://app.scopetraceai.com/register"
+      buttonAction: registerUrl
     },
     {
       name: "Team Tier",
@@ -51,7 +56,7 @@ export default function PricingPage() {
         "Extended audit history"
       ],
       buttonText: "Start Team Tier",
-      buttonAction: "https://app.scopetraceai.com/register"
+      buttonAction: registerUrl
     },
     {
       name: "Enterprise",
