@@ -17,66 +17,67 @@ export default function PricingPage() {
 
   const plans = [
     {
-      name: "Free Tier",
-      price: "$0",
-      subtitle: "Perfect for evaluating ScopeTraceAI",
+      name: "Trial",
+      price: "Free",
+      subtitle: "Try it before you commit",
       bullets: [
-        "1 user",
-        "All agents included",
-        "3 runs per agent",
-        "Jira integration setup",
-        "Basic run history"
-      ],
-      buttonText: "Get Started Free",
-      buttonAction: registerUrl
-    },
-    {
-      name: "User Tier",
-      price: "$59/mo",
-      subtitle: "For individuals and small teams",
-      bullets: [
-        "Up to 5 users",
-        "All agents included",
-        "Jira integrations",
-        "Full run history",
+        "1 user (Owner)",
+        "3 total runs (lifetime)",
+        "All core agents enabled",
+        "Manual trial reset/extend (Owner)",
         "Email support"
       ],
-      buttonText: "Start User Tier",
+      buttonText: "Start free",
       buttonAction: registerUrl
     },
     {
-      name: "Team Tier",
-      price: "$249/mo",
-      subtitle: "For growing teams shipping faster",
+      name: "User",
+      price: "$99 / month",
+      subtitle: "Per month • for small teams",
       bullets: [
-        "Up to 15 users",
-        "All agents included",
-        "Higher usage limits",
-        "Priority processing",
-        "Extended audit history"
+        "Up to 5 users",
+        "50 runs / month (per tenant)",
+        "Monthly usage reset",
+        "Jira integration + write-back",
+        "Audit-ready artifacts (AC/RTM/Test Plan)"
       ],
-      buttonText: "Start Team Tier",
+      buttonText: "Start User",
+      buttonAction: registerUrl
+    },
+    {
+      name: "Team",
+      price: "$499 / month",
+      subtitle: "Per month • for active delivery teams",
+      bullets: [
+        "Up to 10 users",
+        "250 runs / month (per tenant)",
+        "Monthly usage reset",
+        "Priority processing",
+        "Team-ready governance controls"
+      ],
+      buttonText: "Start Team",
       buttonAction: registerUrl
     },
     {
       name: "Enterprise",
-      price: "Contact",
-      subtitle: "For larger organizations and custom needs",
+      price: "Custom",
+      subtitle: "Security, scale, and SLAs",
       bullets: [
-        "Unlimited users",
-        "Custom limits",
-        "SSO / advanced governance",
-        "Dedicated support",
-        "Custom retention"
+        "Custom users & usage",
+        "SSO / advanced controls (as needed)",
+        "Dedicated onboarding",
+        "SLA + support options",
+        "Procurement-friendly terms"
       ],
-      buttonText: "Contact Us",
-      buttonAction: "mailto:hello@scopetraceai.com?subject=ScopeTraceAI%20Enterprise%20Inquiry"
+      buttonText: "Contact sales",
+      buttonAction: "mailto:hell@scopetraceai.com?subject=ScopeTraceAI%20Enterprise%20Pricing",
+      note: "Email hell@scopetraceai.com for pricing."
     }
   ];
 
   const faqs = [
     {
-      question: "Do I need a credit card for Free Tier?",
+      question: "Do I need a credit card for Trial?",
       answer: "No."
     },
     {
@@ -90,6 +91,10 @@ export default function PricingPage() {
     {
       question: "How do you protect customer data?",
       answer: "We do not sell or share your data; see Privacy Policy."
+    },
+    {
+      question: "What is a run?",
+      answer: "A run is one completed agent execution that produces a new artifact."
     }
   ];
 
@@ -126,6 +131,9 @@ export default function PricingPage() {
               <p className="text-xl text-muted-foreground mb-4 max-w-3xl mx-auto">
                 Choose the plan that fits your team's needs.
               </p>
+              <p className="text-sm text-muted-foreground/80 max-w-2xl mx-auto">
+                Runs are shared per tenant. Paid plans reset monthly.
+              </p>
             </header>
 
             {/* Pricing Cards */}
@@ -139,15 +147,9 @@ export default function PricingPage() {
                     {plan.name}
                   </h3>
                   <div className="mb-4">
-                    {plan.price === "Contact" ? (
-                      <div className="text-3xl font-medium text-foreground mb-2">
-                        {plan.price}
-                      </div>
-                    ) : (
-                      <div className="text-3xl font-medium text-foreground mb-2">
-                        {plan.price}
-                      </div>
-                    )}
+                    <div className="text-3xl font-medium text-foreground mb-2">
+                      {plan.price}
+                    </div>
                   </div>
                   <p className="text-sm text-muted-foreground mb-6">
                     {plan.subtitle}
@@ -160,6 +162,11 @@ export default function PricingPage() {
                       </li>
                     ))}
                   </ul>
+                  {plan.note && (
+                    <p className="text-xs text-muted-foreground/70 mb-4 text-center">
+                      {plan.note}
+                    </p>
+                  )}
                   {plan.buttonAction.startsWith("mailto:") ? (
                     <a
                       href={plan.buttonAction}
