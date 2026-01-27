@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { getMoreInfoMailtoLink } from "@/lib/utils";
 
 interface NavigationProps {
-  onMoreInfoClick: () => void;
+  onMoreInfoClick?: () => void;
 }
 
 export function Navigation({ onMoreInfoClick }: NavigationProps) {
@@ -57,7 +58,9 @@ export function Navigation({ onMoreInfoClick }: NavigationProps) {
             Sign in
           </Link>
           <Button
-            onClick={onMoreInfoClick}
+            onClick={() => {
+              window.location.href = getMoreInfoMailtoLink();
+            }}
             className="bg-primary text-primary-foreground hover:bg-primary/90 px-6"
           >
             More information

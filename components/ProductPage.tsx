@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import MoreInfoModal from "@/components/MoreInfoModal";
+import { getMoreInfoMailtoLink } from "@/lib/utils";
 
 export default function ProductPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -324,7 +325,9 @@ export default function ProductPage() {
               <div className="max-w-2xl mx-auto">
                 <Button
                   size="lg"
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => {
+                    window.location.href = getMoreInfoMailtoLink();
+                  }}
                   className="bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-6 text-lg shadow-lg shadow-primary/20 mb-4"
                 >
                   More information

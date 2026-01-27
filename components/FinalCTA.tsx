@@ -1,9 +1,10 @@
 "use client";
 
 import { Button } from "./ui/button";
+import { getMoreInfoMailtoLink } from "@/lib/utils";
 
 interface FinalCTAProps {
-  onOpenModal: () => void;
+  onOpenModal?: () => void;
 }
 
 export function FinalCTA({ onOpenModal }: FinalCTAProps) {
@@ -17,7 +18,9 @@ export function FinalCTA({ onOpenModal }: FinalCTAProps) {
         
         <Button
           size="lg"
-          onClick={onOpenModal}
+          onClick={() => {
+            window.location.href = getMoreInfoMailtoLink();
+          }}
           className="bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-6 text-lg shadow-lg shadow-primary/20"
         >
           More information
