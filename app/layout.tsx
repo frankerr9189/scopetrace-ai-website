@@ -23,6 +23,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        {/* Google tag (gtag.js) - GA4 */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-HFZNBZX2PG"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-HFZNBZX2PG');
+            `,
+          }}
+        />
+      </head>
       <body className="antialiased font-sans">
         {children}
       </body>
